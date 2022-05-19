@@ -1,0 +1,14 @@
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BEEP_ON?TIMER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?BEEP_OFF?TIMER
+
+Program Size: data=10.0 xdata=0 code=292
+creating hex file from ".\Objects\timer"...
+".\Objects\timer" - 0 Error(s), 2 Warning(s).
+Build Time Elapsed:  00:00:01

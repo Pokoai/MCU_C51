@@ -1,0 +1,119 @@
+C51 COMPILER V9.60.0.0   TIMER                                                             05/19/2022 10:06:33 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN .\Objects\timer.obj
+COMPILER INVOKED BY: C:\Keil\Keil_v5\C51\BIN\C51.EXE timer.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\timer.lst) TABS(2) OBJECT(.\Objects\timer.obj)
+
+line level    source
+
+   1          #include <REG52.H>
+   2          #include <intrins.h>
+   3          
+   4          typedef unsigned int u16;
+   5          typedef unsigned char u8;
+   6          
+   7          // 全局变量
+   8          u8 cnt = 0; 
+   9          
+  10          // 寄存器
+  11          sbit BEEP = P1^5;           // 蜂鸣器
+  12          sbit SQUARE_WAVE = P1^0;    // 输出 1s方波
+  13          
+  14          // 毫秒延时函数
+  15          void delay_ms(u8 n)
+  16          {
+  17   1          u16 n1 = 23;
+  18   1      
+  19   1        n1 *= n;
+  20   1          while ( n1-- );
+  21   1      }
+  22          
+  23          // 打开蜂鸣器
+  24          void beep_on(void)
+  25          {
+  26   1          u8 i;
+  27   1      
+  28   1          for (i = 0; i < 10; i++ ) {
+  29   2              BEEP = !BEEP;   // 无源蜂鸣器
+  30   2              delay_ms(10);
+  31   2          }
+  32   1          
+  33   1      }
+  34          
+  35          // 关闭蜂鸣器
+  36          void beep_off(void)
+  37          {
+  38   1          BEEP = 0;
+  39   1      }
+  40          
+  41          
+  42          // 定时器初始化
+  43          void timer0_init()
+  44          {
+  45   1          TMOD = 0x01;    // 16位定时器工作方式1
+  46   1          TH0 = 0x3C;     // 装初值 50ms
+  47   1          TL0 = 0xB0;
+  48   1          TR0 = 1;       // 启动定时器
+  49   1          ET0 = 1;       // 允许定时器中断
+  50   1          EA = 1;        // 开总中断
+  51   1      }
+  52          
+  53          // 定时器中断服务程序
+  54          void timer0() interrupt 1
+C51 COMPILER V9.60.0.0   TIMER                                                             05/19/2022 10:06:33 PAGE 2   
+
+  55          {
+  56   1          // 装初值
+  57   1          TH0 = 0x3C;
+  58   1          TL0 = 0xB0;
+  59   1      
+  60   1          cnt++;
+  61   1      }
+  62          
+  63          void main(void)
+  64          {    
+  65   1          u8 LED = 0x01;  // 第一个灯亮
+  66   1          u8 cnt2 = 0;    // 闪动10次计数
+  67   1          u8 temp = 0; 
+  68   1          timer0_init();  // 定时器0初始化
+  69   1           
+  70   1          while(1) {
+  71   2              P0 = LED;
+  72   2      
+  73   2              if ( 2 == cnt ) {
+  74   3                  cnt = 0;
+  75   3            cnt2++;
+  76   3      
+  77   3                  if ( LED != 0 ) {
+  78   4                      temp = LED;
+  79   4                      LED = 0;
+  80   4                  } else {
+  81   4                      LED = temp;
+  82   4                  }
+  83   3              }
+  84   2      
+  85   2              if ( 20 == cnt2 ) {
+  86   3                  cnt2 = 0;
+  87   3                  LED = _crol_(LED, 1); // 千万要注意：不能少了 LED = 这部分，
+  88   3                                        // 移位后记得要重新赋给 LED
+  89   3              }
+  90   2          }
+  91   1      }
+  92          
+  93          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    124    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
