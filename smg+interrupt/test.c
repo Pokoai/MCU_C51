@@ -26,9 +26,9 @@ sbit SQUARE_WAVE = P1^0;   // 输出方波
    
 
 // 毫秒延时函数
-void delay_ms(long n)
+void delay_ms(u16 n)
 {
-    u16 n1 = 23;
+    u8 n1 = 23;
 
 	n *= n1;
     while ( n-- );
