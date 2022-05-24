@@ -16,6 +16,7 @@
 
 ### VisualStudioCode ###
 .vscode/*
+*/.vscode/keil-assistant.log
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
